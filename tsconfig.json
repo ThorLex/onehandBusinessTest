@@ -10,13 +10,9 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "experimentalDecorators": true,
-    "paths": {
-      "shared": [
-        "./dist/shared"
-      ],
+    "experimentalDecorators": true,    "paths": {
       "shared-lib": [
-        "./dist/shared-lib"
+        "./projects/shared-lib/src/public-api"
       ]
     },
     "importHelpers": true,
