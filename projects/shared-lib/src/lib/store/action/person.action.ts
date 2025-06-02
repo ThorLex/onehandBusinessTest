@@ -7,7 +7,7 @@ export class GetPersons {
 
 export class GetPersonById {
   static readonly type = '[Person] Get Person';
-  constructor(public id: string) {}
+  constructor(public id: number) {}
 }
 
 export class AddPerson {
@@ -22,5 +22,5 @@ export class UpdatePerson {
 
 export class DeletePerson {
   static readonly type = '[Person] Delete Person';
-  constructor(public id: string) {}
+  constructor(public id: number) {}
 }

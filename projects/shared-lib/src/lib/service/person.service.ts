@@ -12,9 +12,9 @@ export class PersonService {
     return of([]);
   }
 
-  getPerson(id: string): Observable<personOutput> {
+  getPerson(id: number): Observable<personOutput> {
     // Replace with actual implementation
-    return of({ id } as unknown as personOutput["id"]);
+    return of({ id } as personOutput);
   }
 
   addPerson(payload: personOutput): Observable<personOutput> {
@@ -27,7 +27,7 @@ export class PersonService {
     return of(payload);
   }
 
-  deletePerson(id: string): Observable<any> {
+  deletePerson(id: number): Observable<any> {
     // Replace with actual implementation
     return of(null);
   }
