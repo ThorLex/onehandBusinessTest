@@ -1,0 +1,20 @@
+{
+  "fr": {
+    "title": "Titre",
+    "person": "Personne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "priority": "Priorité",
+    "labels": "Labels",
+    "description": "Description"
+  },
+  "en": {
+    "title": "Title",
+    "person": "Person",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "priority": "Priority",
+    "labels": "Labels",
+    "description": "Description"
+  }
+}
