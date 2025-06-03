@@ -1,0 +1,9 @@
+<div>
+  <input #search class="search"
+    type="text"
+    placeholder="Search..." (keydown.enter)="onSearch(search.value)">
+  <angular2-smart-table
+    [settings]="settings"
+   [source]="data">
+  </angular2-smart-table>
+</div>

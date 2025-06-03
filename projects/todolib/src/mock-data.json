@@ -1,0 +1,22 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Créer la maquette UI",
+      "person": 1,
+      "startDate": "2025-06-01T09:00:00Z",
+      "endDate": null,
+      "priority": "Moyen",
+      "labels": ["HTML", "CSS"],
+      "description": "Créer la maquette de l'application en HTML/CSS."
+    }
+  ],
+  "persons": [
+    {
+      "id": 1,
+      "name": "Alice Martin",
+      "email": "alice.martin@email.com",
+      "phone": "0601020304"
+    }
+  ]
+}
