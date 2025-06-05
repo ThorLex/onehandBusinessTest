@@ -12,7 +12,11 @@ standalone: true,
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'todoApp';
+     title = 'todoApp';
+goToPreviousPage() {
+this.title = 'todoApp edit ';
+}
+
 
 
 }

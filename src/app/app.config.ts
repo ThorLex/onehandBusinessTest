@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     importProvidersFrom(
       NgxsModule.forRoot([TodoState, personState], {
-        developmentMode: !environment.production
+        developmentMode: true
       }),
       NgxsReduxDevtoolsPluginModule.forRoot(),
       NgxsLoggerPluginModule.forRoot()

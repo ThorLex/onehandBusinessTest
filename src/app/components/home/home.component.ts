@@ -98,7 +98,10 @@ export class HomeComponent implements OnInit {
     columns: {
       avatar: {
         title: '',
-        type: 'html',
+        type: 'html' ,
+        valuePrepareFunction: (value: todoInput) => {
+          return `<img src="${value.person?.avatar || 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b'}" alt="Avatar" style="width: 48px; height: 48px; border-radius: 50%;">`;
+        },
 
         width: '48px',
       },
@@ -109,19 +112,14 @@ export class HomeComponent implements OnInit {
       person: {
         title: 'Personne',
         type: 'html',
+        valuePrepareFunction: (value: todoInput) => {
+          return this.allTodos  ? `<span class="text-blue-600">${value.person.name[2]}</span>` : 'Aucune personne assignée';
+        },
 
 
-      },
-      startDate: {
-        title: 'Début',
-        type: 'text',
-
-      },
-      endDate: {
-        title: 'Fin',
-        type: 'text',
 
       },
+
       priority: {
         title: 'Priorité',
         type: 'html',
@@ -303,13 +301,9 @@ export class HomeComponent implements OnInit {
 
 
   goToPreviousPage(): void {
-
     console.log('goToPreviousPage called');
     console.log('Current page before decrement:', this.currentPage);
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.updateTableSource();
-    }
+
   }
 
   goToNextPage(): void {

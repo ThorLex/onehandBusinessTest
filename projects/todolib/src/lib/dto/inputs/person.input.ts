@@ -3,4 +3,5 @@ export  interface personInput {
   name: string;
   email: string;
   phone: string;
+   avatar: string | null;
 }
