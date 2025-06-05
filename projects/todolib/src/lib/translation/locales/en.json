@@ -1,0 +1,12 @@
+{
+   "translate":{
+   "title": "Title",
+    "person": "Person",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "priority": "Priority",
+    "labels": "Labels",
+    "description": "Description"
+
+   }
+}
