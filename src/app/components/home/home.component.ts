@@ -1,3 +1,4 @@
+import { FormComponent } from './../form/form.component';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -5,22 +6,25 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { GetTodos, TodoState } from 'todolib';
+import { Observable, of } from 'rxjs';
+import { GetTodos, TodoState, AddTodo, UpdateTodo } from 'todolib'; // Assuming you have AddTodo and UpdateTodo actions in todolib
 import { Angular2SmartTableModule, LocalDataSource, Settings } from 'angular2-smart-table';
+import { MatDialog } from '@angular/material/dialog';
+
+interface Person {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 interface TodoItem {
   id: number;
   title: string;
-  person: {
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-    avatar: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  person: Person;
   startDate: string;
   endDate: string | null;
   priority: 'Facile' | 'Moyen' | 'Difficile';
@@ -55,7 +59,8 @@ interface LabelItem {
     MatCheckboxModule,
     MatIconModule,
     MatButtonModule,
-    Angular2SmartTableModule
+    Angular2SmartTableModule,
+
   ]
 })
 export class HomeComponent implements OnInit {
@@ -65,6 +70,15 @@ export class HomeComponent implements OnInit {
   source = new LocalDataSource();
   allTodos: TodoItem[] = [];
   filteredTodos: TodoItem[] = [];
+
+  // Assuming you have a list of all possible people for the autocomplete
+  // This would typically come from a service or another state
+  allPeople: Person[] = [
+    { id: 1, name: 'Alice Smith', email: 'alice@example.com', phone: '111-222-3333', avatar: 'https://i.pravatar.cc/150?img=1', createdAt: '', updatedAt: '' },
+    { id: 2, name: 'Bob Johnson', email: 'bob@example.com', phone: '444-555-6666', avatar: 'https://i.pravatar.cc/150?img=2', createdAt: '', updatedAt: '' },
+    { id: 3, name: 'Charlie Brown', email: 'charlie@example.com', phone: '777-888-9999', avatar: 'https://i.pravatar.cc/150?img=3', createdAt: '', updatedAt: '' },
+    { id: 4, name: 'Diana Prince', email: 'diana@example.com', phone: '123-456-7890', avatar: 'https://i.pravatar.cc/150?img=4', createdAt: '', updatedAt: '' },
+  ];
 
   // États
   errorMessage: string | null = null;
@@ -102,96 +116,81 @@ export class HomeComponent implements OnInit {
   ];
 
   // Configuration du Smart Table
-  settings:Settings = {
+  settings: Settings = {
     columns: {
       avatar: {
         title: '',
         type: 'html',
-        valuePrepareFunction: ( row: TodoItem) => {
-          return `<img src="${row.person?.avatar || ''}" alt="avatar" style="width:32px;height:32px;border-radius:50%;" />`;
-        },
+
         width: '48px',
-
-
       },
       title: {
         title: 'Titre',
         type: 'text',
-
       },
       person: {
         title: 'Personne',
         type: 'html',
-        valuePrepareFunction: ( row: TodoItem) => {
-          return `<span><i class='fas fa-user text-blue-400 mr-1'></i> ${row.person?.name || ''}</span>`;
-        },
+
 
       },
       startDate: {
         title: 'Début',
         type: 'text',
-        valuePrepareFunction: (value: string) => {
-          return new Date(value).toLocaleDateString('fr-FR');
-        },
 
       },
       endDate: {
         title: 'Fin',
         type: 'text',
-        valuePrepareFunction: (value: string | null) => {
-          return value ? new Date(value).toLocaleDateString('fr-FR') : '-';
-        },
 
       },
       priority: {
         title: 'Priorité',
         type: 'html',
-        valuePrepareFunction: (cell: string) => {
-          const priorityConfig = {
-            'Facile': { icon: 'fa-check-circle', color: 'text-green-500' },
-            'Moyen': { icon: 'fa-exclamation-circle', color: 'text-yellow-500' },
-            'Difficile': { icon: 'fa-times-circle', color: 'text-red-500' }
-          };
-          const config = priorityConfig[cell as keyof typeof priorityConfig];
-          return `<span><i class='fa ${config.icon} ${config.color} mr-1'></i> ${cell}</span>`;
-        },
 
       },
       labels: {
         title: 'Labels',
         type: 'html',
-        valuePrepareFunction: (cell: string[]) => {
-          if (!Array.isArray(cell)) return '';
-          const labelConfig = {
-            'HTML': { icon: 'fab fa-html5', color: 'text-orange-500' },
-            'CSS': { icon: 'fab fa-css3-alt', color: 'text-blue-500' },
-            'NODE JS': { icon: 'fab fa-node-js', color: 'text-green-500' },
-            'JQUERY': { icon: 'fab fa-js', color: 'text-purple-500' }
-          };
-          return cell.map((label: string) => {
-            const config = labelConfig[label as keyof typeof labelConfig];
-            return `<span class='inline-flex items-center mr-1'><i class='${config.icon} ${config.color} mr-1'></i>${label}</span>`;
-          }).join(' ');
-        },
 
       },
       description: {
         title: 'Description',
         type: 'text',
+      },
+      actions: {
+        title: 'Actions',
+        type: 'html',
+
 
       }
     },
-    actions: false,
+    actions: {
+      columnTitle: '',
+      add: false,
+      edit: false,
+      delete: false,
+      custom: [
+        { name: 'edit', title: '<i class="material-icons">edit</i>' }
+      ],
+      position: 'right'
+    },
+    edit: {
+      editButtonContent: '<mat-icon>edit</mat-icon>',
+    },
+    delete: {
+      deleteButtonContent: '<mat-icon>delete</mat-icon>',
+    },
     hideSubHeader: true,
     pager: {
       display: false
     }
   };
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.loadTodos();
+    this.loadTodos()
   }
 
   // Chargement des données
@@ -254,8 +253,8 @@ export class HomeComponent implements OnInit {
 
   private sortData(data: TodoItem[]): TodoItem[] {
     return data.sort((a, b) => {
-      let aValue: any = a[this.sortBy as keyof TodoItem];
-      let bValue: any = b[this.sortBy as keyof TodoItem];
+      let aValue: any = (a as any)[this.sortBy];
+      let bValue: any = (b as any)[this.sortBy];
 
       if (this.sortBy === 'person') {
         aValue = a.person?.name || '';
@@ -349,7 +348,6 @@ export class HomeComponent implements OnInit {
 
   // Gestion des événements de navigation
   onNavigationClick(item: NavigationItem): void {
-    // Logique pour la navigation si nécessaire
     console.log('Navigation clicked:', item.label);
   }
 
@@ -359,8 +357,35 @@ export class HomeComponent implements OnInit {
 
   // Ajout d'une nouvelle tâche
   onAddNewTask(): void {
-    // Logique pour ajouter une nouvelle tâche
-    console.log('Ajouter une nouvelle tâche');
+    this.openTaskModal(null); // Open modal for adding a new task
+  }
+
+  // Édition d'une tâche existante
+  onEditTask(task: TodoItem): void {
+    this.openTaskModal(task); // Open modal for editing an existing task
+  }
+
+  openTaskModal(task: TodoItem | null): void {
+    const dialogRef = this.dialog.open(FormComponent, {
+      width: '600px',
+      data: { task: task, allPeople: this.allPeople } // Pass existing task data and all people
+    });
+
+    dialogRef.componentInstance.saveTask.subscribe((savedTask: TodoItem) => {
+      if (savedTask.id) {
+        // Update existing task
+        this.store.dispatch(new UpdateTodo(savedTask)); // Assuming you have an UpdateTodo action
+      } else {
+        // Add new task with a generated ID (for demonstration, in real app, backend would provide ID)
+        const newId = Math.max(...this.allTodos.map(t => t.id)) + 1;
+        this.store.dispatch(new AddTodo({ ...savedTask, id: newId })); // Assuming you have an AddTodo action
+      }
+      this.loadTodos(); // Reload to reflect changes
+    });
+
+    dialogRef.componentInstance.cancel.subscribe(() => {
+      console.log('Modal cancelled');
+    });
   }
 
   // Getters utilitaires

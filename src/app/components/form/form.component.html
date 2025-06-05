@@ -1,15 +1,109 @@
-<div class="form-container">
-  <h2>{{ title }}</h2>
-  <!-- Add your form template here -->
-  <form>
-    <div class="form-group">
-      <label for="title">Title</label>
-      <input type="text" id="title" class="form-control" placeholder="Enter title">
-    </div>
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea id="description" class="form-control" placeholder="Enter description"></textarea>
-    </div>
-    <button type="submit" class="btn-submit">Submit</button>
-  </form>
-</div>
+<h2 mat-dialog-title>{{ isEditMode ? 'Modifier la tâche' : 'Ajouter une nouvelle tâche' }}</h2>
+    <mat-dialog-content class="mat-typography">
+      <form [formGroup]="taskForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Titre de la tâche</mat-label>
+          <input matInput formControlName="title" placeholder="Entrez le titre de la tâche">
+          <mat-error *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched">
+            {{ getErrorMessage('title') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Assigner à</mat-label>
+          <input
+            type="text"
+            placeholder="Sélectionnez une personne"
+            aria-label="Staff"
+            matInput
+            formControlName="person"
+            [matAutocomplete]="auto"
+          >
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayPersonName">
+            <mat-option *ngFor="let option of filteredPeople | async" [value]="option">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="taskForm.get('person')?.invalid && taskForm.get('person')?.touched">
+            {{ getErrorMessage('person') }}
+          </mat-error>
+        </mat-form-field>
+
+        <div class="row-fields">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Date de début</mat-label>
+            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" readonly>
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+            <mat-error *ngIf="taskForm.get('startDate')?.invalid && taskForm.get('startDate')?.touched">
+              {{ getErrorMessage('startDate') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Date de fin</mat-label>
+            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" readonly [disabled]="taskForm.get('endDate')?.disabled || false">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+            <mat-error *ngIf="taskForm.get('endDate')?.invalid && taskForm.get('endDate')?.touched">
+              {{ getErrorMessage('endDate') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+
+        <mat-checkbox formControlName="isCompleted" (change)="onCompletionChange($event.isTrusted)">
+          Tâche terminée
+        </mat-checkbox>
+
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Priorité</mat-label>
+          <mat-select formControlName="priority">
+            <mat-option value="Facile">Facile</mat-option>
+            <mat-option value="Moyen">Moyen</mat-option>
+            <mat-option value="Difficile">Difficile</mat-option>
+          </mat-select>
+          <mat-error *ngIf="taskForm.get('priority')?.invalid && taskForm.get('priority')?.touched">
+            {{ getErrorMessage('priority') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Labels</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Labels selection">
+            <mat-chip-row *ngFor="let label of taskForm.get('labels')?.value" (removed)="removeLabel(label)">
+              {{label}}
+              <button matChipRemove [attr.aria-label]="'remove ' + label">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          </mat-chip-grid>
+          <input
+            placeholder="Ajouter des labels"
+            #labelInput
+            [formControl]="labelCtrl"
+            [matChipInputFor]="chipGrid"
+            [matAutocomplete]="labelAuto"
+            (matChipInputTokenEnd)="addLabelFromInput($event)"
+          >
+          <mat-autocomplete #labelAuto="matAutocomplete" (optionSelected)="selectedLabel($event)">
+            <mat-option *ngFor="let label of filteredLabels | async" [value]="label">
+              {{label}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Description de la tâche" rows="4"></textarea>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="onCancel()">Annuler</button>
+      <button mat-flat-button color="primary" [disabled]="taskForm.invalid" (click)="onSave()">
+        {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+      </button>
+    </mat-dialog-actions>
