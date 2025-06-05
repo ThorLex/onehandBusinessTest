@@ -5,7 +5,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
-import { TodoState } from 'todolib';
+import { personState, TodoState } from 'todolib';
 import { environment } from '../environments/environment';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideHttpClient(withFetch()),
     importProvidersFrom(
-      NgxsModule.forRoot([TodoState], {
+      NgxsModule.forRoot([TodoState, personState], {
         developmentMode: !environment.production
       }),
       NgxsReduxDevtoolsPluginModule.forRoot(),

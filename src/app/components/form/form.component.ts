@@ -18,6 +18,5 @@ export class FormComponent implements OnInit {
     console.log('FormComponent initialized');
   }
 
-  // Add your form logic here
-  // For example, you can define form controls, validation, and submission methods
+
 }

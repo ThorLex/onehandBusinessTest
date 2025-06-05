@@ -35,19 +35,19 @@
                 <nav class="space-y-1">
                     <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
                         <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span>Inbox</span>
+                        <span>HTML</span>
                     </a>
                     <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
                         <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span>Chat</span>
+                        <span>CSS</span>
                     </a>
                     <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
                         <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                        <span>Sent</span>
+                        <span>javascript</span>
                     </a>
                     <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
                         <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        <span>Library</span>
+                        <span>Jquery</span>
                     </a>
                 </nav>
             </div>
@@ -72,13 +72,7 @@
                 </div>
 
                 <div class="flex items-center space-x-2 text-sm text-gray-500">
-                    <span>{{ (currentPage - 1) * pageSize + 1 }}-{{ Math.min(currentPage * pageSize, pagedSource.length) }} of {{ pagedSource.length }}</span>
-                    <button class="p-1 hover:bg-gray-100 rounded" [disabled]="currentPage === 1" (click)="goToPreviousPage()">
-                        <i class="fas fa-chevron-left text-gray-400"></i>
-                    </button>
-                    <button class="p-1 hover:bg-gray-100 rounded" [disabled]="currentPage * pageSize >= pagedSource.length" (click)="goToNextPage()">
-                        <i class="fas fa-chevron-right text-gray-400"></i>
-                    </button>
+                    <!-- Pagination custom supprimée car gérée par smart-table -->
                 </div>
             </div>
 
@@ -86,7 +80,7 @@
             <div class="divide-y divide-gray-100 overflow-x-auto" style="max-width: 100%;">
               <angular2-smart-table
                 [settings]="settings"
-                [source]="pagedSource"
+                [source]="filteredSource"
                 class="custom-smart-table min-w-full"
                 [attr.data-testid]="'task-table'"
                 style="background:transparent; border:none; min-width: 800px;"

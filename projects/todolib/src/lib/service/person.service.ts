@@ -1,34 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { personOutput } from '../dto';
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class PersonService {
+  private readonly API_URL = 'http://localhost:5000/persons';
+
+  constructor(private http: HttpClient) {}
+
   getPersons(): Observable<personOutput[]> {
-    // Replace with actual implementation
-    return of([]);
+    return this.http.get<personOutput[]>(this.API_URL);
   }
 
   getPerson(id: number): Observable<personOutput> {
-    // Replace with actual implementation
-    return of({ id } as personOutput);
+    return this.http.get<personOutput>(`${this.API_URL}/${id}`);
   }
 
   addPerson(payload: personOutput): Observable<personOutput> {
-    // Replace with actual implementation
-    return of(payload);
+    return this.http.post<personOutput>(this.API_URL, payload);
   }
 
   updatePerson(payload: personOutput): Observable<personOutput> {
-    // Replace with actual implementation
-    return of(payload);
+    return this.http.put<personOutput>(`${this.API_URL}/${payload.id}`, payload);
   }
 
   deletePerson(id: number): Observable<any> {
-    // Replace with actual implementation
-    return of(null);
+    return this.http.delete(`${this.API_URL}/${id}`);
   }
 }

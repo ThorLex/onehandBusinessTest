@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 8;
   get Math() { return Math; }
-  
+
   get pagedSource(): TodoItem[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredSource.slice(start, start + this.pageSize);
@@ -172,8 +172,8 @@ export class HomeComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.initialLoading = true;
     this.store.dispatch(new GetTodos());
+    this.initialLoading = true;
     this.todos$.subscribe({
       next: (todos) => {
         this.source = todos;
