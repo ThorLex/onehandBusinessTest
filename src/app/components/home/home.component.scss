@@ -1,0 +1,120 @@
+/* Styles personnalisés pour angular2-smart-table */
+
+
+::ng-deep thead {
+  display: none;
+}
+
+::ng-deep .custom-smart-table {
+  .angular2-smart-table {
+    font-size: 14px;
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+
+      thead {
+        display: none;
+      }
+
+      tbody {
+        tr {
+          background: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(4px);
+          border: 1px solid #e5e7eb;
+          border-radius: 12px;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+          }
+
+          td {
+            padding: 12px 16px;
+            border: none;
+            vertical-align: middle;
+
+            &:first-child {
+              border-top-left-radius: 12px;
+              border-bottom-left-radius: 12px;
+            }
+
+            &:last-child {
+              border-top-right-radius: 12px;
+              border-bottom-right-radius: 12px;
+            }
+          }
+        }
+      }
+    }
+
+    .angular2-smart-action {
+      display: none; // Cache les actions par défaut
+    }
+  }
+}
+
+/* Styles pour les éléments de navigation */
+.navigation-item {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateX(2px);
+  }
+}
+
+/* Styles pour la barre de recherche */
+.search-input {
+  transition: all 0.3s ease;
+
+  &:focus {
+    transform: scale(1.02);
+  }
+}
+
+/* Styles pour les badges de statut */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation pour les éléments de la liste */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-item {
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100% !important;
+  }
+}

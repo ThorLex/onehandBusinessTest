@@ -1,95 +1,177 @@
-<div>
-<div class="bg-blue-100 font-sans">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 m-3  bg-white border-r border-gray-200 p-4">
-            <!-- Add New Task Button -->
-            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-4 rounded-md mb-6 flex items-center justify-center space-x-2 text-sm font-medium">
-                <i class="fas fa-plus text-xs"></i>
-                <span>Add New Task</span>
-            </button>
+<div class="min-h-screen bg-blue-50 p-4">
+  <div class="flex h-screen bg-white rounded-lg shadow-sm overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 p-4">
+      <!-- Add New Task Button -->
+      <div class="flex items-center mb-6 px-2">
+        <button
+          (click)="onAddNewTask()"
+          class="flex items-center text-blue-500 text-sm hover:text-blue-600 transition-colors cursor-pointer">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Ajouter une nouvelle tâche
+        </button>
+      </div>
 
-            <!-- Navigation -->
-            <nav class="space-y-1 mb-8">
-                <a href="#" class="flex items-center space-x-3 px-3 py-2 text-blue-600 bg-blue-50 rounded-md text-sm">
-                    <i class="fas fa-inbox w-4 text-sm"></i>
-                    <span>All</span>
-                </a>
-                <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
-                    <i class="fas fa-star w-4 text-sm"></i>
-                    <span>Priority</span>
-                </a>
-                <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
-                    <i class="fas fa-calendar w-4 text-sm"></i>
-                    <span>Today</span>
-                </a>
-                <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
-                    <i class="fas fa-check w-4 text-sm"></i>
-                    <span>Completed</span>
-                </a>
-            </nav>
+      <!-- Navigation -->
+      <nav class="space-y-1 p-2 mb-8">
+        <a
+          *ngFor="let item of navigationItems"
+          (click)="onNavigationClick(item)"
+          class="flex items-center px-2 py-2 text-sm rounded-md cursor-pointer transition-colors"
+          [ngClass]="[item.bgColor, item.textColor]">
+          <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+          </svg>
+          <span class="flex-1">{{ item.label }}</span>
+          <span class="text-xs px-2 py-1 rounded-full"
+                [ngClass]="item.active ? 'bg-blue-200 text-blue-800' : 'bg-gray-100 text-gray-600'">
+            {{ totalItems }}
+          </span>
+        </a>
+      </nav>
 
-            <!-- Labels -->
-            <div>
-                <h3 class="text-xs font-medium text-gray-500 mb-3 uppercase tracking-wider">Labels</h3>
-                <nav class="space-y-1">
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span>HTML</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
-                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span>CSS</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
-                        <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                        <span>javascript</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
-                        <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        <span>Jquery</span>
-                    </a>
-                </nav>
+      <!-- Filtres Priorité -->
+      <div class="mb-6">
+        <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider px-2 mb-3">Priorité</h3>
+        <nav class="space-y-1">
+          <a
+            (click)="togglePriorityFilter('Facile')"
+            class="flex items-center px-2 py-2 text-sm rounded-md cursor-pointer transition-colors"
+            [ngClass]="isPriorityActive('Facile') ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'">
+            <div class="w-2 h-2 rounded-full mr-3 bg-green-500"></div>
+            <span class="flex-1">Facile</span>
+            <span class="text-xs text-gray-500">{{ getPriorityCount('Facile') }}</span>
+          </a>
+          <a
+            (click)="togglePriorityFilter('Moyen')"
+            class="flex items-center px-2 py-2 text-sm rounded-md cursor-pointer transition-colors"
+            [ngClass]="isPriorityActive('Moyen') ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'">
+            <div class="w-2 h-2 rounded-full mr-3 bg-yellow-500"></div>
+            <span class="flex-1">Moyen</span>
+            <span class="text-xs text-gray-500">{{ getPriorityCount('Moyen') }}</span>
+          </a>
+          <a
+            (click)="togglePriorityFilter('Difficile')"
+            class="flex items-center px-2 py-2 text-sm rounded-md cursor-pointer transition-colors"
+            [ngClass]="isPriorityActive('Difficile') ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'">
+            <div class="w-2 h-2 rounded-full mr-3 bg-red-500"></div>
+            <span class="flex-1">Difficile</span>
+            <span class="text-xs text-gray-500">{{ getPriorityCount('Difficile') }}</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Labels -->
+      <div>
+        <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider px-2 mb-3">Labels</h3>
+        <nav class="space-y-1">
+          <a
+            *ngFor="let label of labels"
+            (click)="onLabelClick(label)"
+            class="flex items-center px-2 py-2 text-sm rounded-md cursor-pointer transition-colors"
+            [ngClass]="label.active ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'">
+            <div class="w-2 h-2 rounded-full mr-3" [ngClass]="label.color"></div>
+            <span class="flex-1">{{ label.label }}</span>
+            <span class="text-xs text-gray-500">{{ label.count }}</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Header -->
+      <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <input type="checkbox" class="rounded border-gray-300">
+          <button class="p-1 hover:bg-gray-50 rounded transition-colors">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h6m0 0V10a2 2 0 012-2h2a2 2 0 012 2v8a2 2 0 01-2 2h-2z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <!-- Search Bar -->
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              [(ngModel)]="searchQuery"
+              (input)="onSearch()"
+              class="w-80 pl-10 pr-4 py-2 bg-gray-100 rounded-md border-0 text-sm focus:outline-none focus:bg-white focus:shadow-sm transition-all">
+            <svg class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+
+          <!-- Sort Component -->
+          <div class="flex items-center space-x-2">
+            <select
+              [(ngModel)]="sortBy"
+              (change)="onSortChange()"
+              class="flex items-center space-x-1 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md border border-gray-200 focus:outline-none">
+              <option value="title">Titre</option>
+              <option value="startDate">Date</option>
+              <option value="priority">Priorité</option>
+              <option value="person">Personne</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 text-xs text-gray-500">
+          <span class="bg-blue-50 px-3 py-2 rounded-lg font-medium">{{ getCurrentRange() }}</span>
+          <button
+            (click)="goToPreviousPage()"
+            [disabled]="isPreviousDisabled"
+            class="p-2 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button
+            (click)="goToNextPage()"
+            [disabled]="isNextDisabled"
+            class="p-2 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="initialLoading" class="flex items-center justify-center h-64">
+        <div class="text-gray-500">Chargement des tâches...</div>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="errorMessage" class="p-4">
+        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+          <div class="flex">
+            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+            <div class="ml-3">
+              <p class="text-sm text-red-600">{{ errorMessage }}</p>
             </div>
-        </aside>
+          </div>
+        </div>
+      </div>
 
-        <!-- Main Content -->
-        <main class="flex-1 m-3 bg-white">
-            <!-- Header -->
-            <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <input type="checkbox" class="rounded border-gray-300 text-blue-600">
-                    <button class="p-1.5 hover:bg-gray-100 rounded">
-                        <i class="fas fa-archive text-gray-500 text-sm"></i>
-                    </button>
-                </div>
-
-                <div class="flex-1 max-w-md mx-8">
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-                          <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-2 bg-gray-50 rounded-full border-0 focus:outline-none focus:bg-white focus:shadow-sm text-sm" (input)="onSearch($event)">
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-2 text-sm text-gray-500">
-                    <!-- Pagination custom supprimée car gérée par smart-table -->
-                </div>
-            </div>
-
-            <!-- Task List -->
-            <div class="divide-y divide-gray-100 overflow-x-auto" style="max-width: 100%;">
-              <angular2-smart-table
-                [settings]="settings"
-                [source]="filteredSource"
-                class="custom-smart-table min-w-full"
-                [attr.data-testid]="'task-table'"
-                style="background:transparent; border:none; min-width: 800px;"
-              >
-              </angular2-smart-table>
-            </div>
-
-        </main>
-    </div>
+      <!-- Smart Table -->
+      <div *ngIf="!initialLoading && !errorMessage" class="p-4">
+        <angular2-smart-table
+          [settings]="settings"
+          [source]="source"
+          class="custom-smart-table">
+        </angular2-smart-table>
+      </div>
+    </main>
   </div>
-  </div>
-
+</div>
