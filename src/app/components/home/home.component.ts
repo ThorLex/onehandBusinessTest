@@ -57,6 +57,23 @@ export class HomeComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 8;
   get Math() { return Math; }
+  
+  get pagedSource(): TodoItem[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredSource.slice(start, start + this.pageSize);
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage * this.pageSize < this.filteredSource.length) {
+      this.currentPage++;
+    }
+  }
 
   settings: Settings = {
     columns: {
@@ -97,10 +114,10 @@ export class HomeComponent implements OnInit {
         valuePrepareFunction: (cell: any) => {
           let icon = '';
           let color = '';
-          if (cell === 'Facile') { icon = 'fa-circle-check'; color = 'text-green-500'; }
-          if (cell === 'Moyen') { icon = 'fa-circle-exclamation'; color = 'text-yellow-500'; }
-          if (cell === 'Difficile') { icon = 'fa-circle-xmark'; color = 'text-red-500'; }
-          return `<span><i class='fas ${icon} ${color} mr-1'></i> ${cell}</span>`;
+          if (cell === 'Facile') { icon = 'fa fa-check-circle'; color = 'text-green-500'; }
+          if (cell === 'Moyen') { icon = 'fa fa-exclamation-circle'; color = 'text-yellow-500'; }
+          if (cell === 'Difficile') { icon = 'fa fa-times-circle'; color = 'text-red-500'; }
+          return `<span><i class='${icon} ${color} mr-1'></i> ${cell}</span>`;
         },
         filter: {
           type: 'list',
@@ -122,11 +139,11 @@ export class HomeComponent implements OnInit {
           return cell.map((label: string) => {
             let icon = '';
             let color = '';
-            if (label === 'HTML') { icon = 'fa-html5'; color = 'text-orange-500'; }
-            if (label === 'CSS') { icon = 'fa-css3-alt'; color = 'text-blue-500'; }
-            if (label === 'NODE JS') { icon = 'fa-node-js'; color = 'text-green-500'; }
-            if (label === 'JQUERY') { icon = 'fa-js'; color = 'text-purple-500'; }
-            return `<span class='inline-flex items-center mr-1'><i class='fab ${icon} ${color} mr-1'></i>${label}</span>`;
+            if (label === 'HTML') { icon = 'fab fa-html5'; color = 'text-orange-500'; }
+            if (label === 'CSS') { icon = 'fab fa-css3-alt'; color = 'text-blue-500'; }
+            if (label === 'NODE JS') { icon = 'fab fa-node-js'; color = 'text-green-500'; }
+            if (label === 'JQUERY') { icon = 'fab fa-js'; color = 'text-purple-500'; }
+            return `<span class='inline-flex items-center mr-1'><i class='${icon} ${color} mr-1'></i>${label}</span>`;
           }).join(' ');
         },
         filter: {
@@ -173,12 +190,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  // Remplace la logique de pagination custom par celle du smart-table
-  get pagedSource(): TodoItem[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredSource.slice(start, start + this.pageSize);
-  }
-
   // Recherche et tri sont gérés par le smart-table, donc on ne filtre plus côté composant
   applyFiltersAndSearch(): void {
     let filtered = [...this.source];
@@ -216,6 +227,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSearch(event: any): void {
+    console.log(event.target.valuent)
     this.searchQuery = event.target.value;
     this.applyFiltersAndSearch();
   }

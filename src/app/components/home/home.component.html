@@ -72,11 +72,11 @@
                 </div>
 
                 <div class="flex items-center space-x-2 text-sm text-gray-500">
-                    <span>{{ (currentPage - 1) * pageSize + 1 }}-{{ Math.min(currentPage * pageSize, filteredSource.length) }} of {{ filteredSource.length }}</span>
+                    <span>{{ (currentPage - 1) * pageSize + 1 }}-{{ Math.min(currentPage * pageSize, pagedSource.length) }} of {{ pagedSource.length }}</span>
                     <button class="p-1 hover:bg-gray-100 rounded" [disabled]="currentPage === 1" (click)="goToPreviousPage()">
                         <i class="fas fa-chevron-left text-gray-400"></i>
                     </button>
-                    <button class="p-1 hover:bg-gray-100 rounded" [disabled]="currentPage * pageSize >= filteredSource.length" (click)="goToNextPage()">
+                    <button class="p-1 hover:bg-gray-100 rounded" [disabled]="currentPage * pageSize >= pagedSource.length" (click)="goToNextPage()">
                         <i class="fas fa-chevron-right text-gray-400"></i>
                     </button>
                 </div>
