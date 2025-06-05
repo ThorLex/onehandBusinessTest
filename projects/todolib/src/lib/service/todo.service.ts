@@ -1,34 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { todoOutput } from '../dto';
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class todoService {
+  private readonly API_URL = 'http://localhost:5000/todos';
+
+  constructor(private http: HttpClient) {}
+
   getTodos(): Observable<todoOutput[]> {
-    // Replace with actual implementation
-    return of([]);
+    return this.http.get<todoOutput[]>(this.API_URL);
   }
 
   getTodo(id: number): Observable<todoOutput> {
-    // Replace with actual implementation
-    return of({ id } as todoOutput);
+    return this.http.get<todoOutput>(`${this.API_URL}/${id}`);
   }
 
   addTodo(payload: todoOutput): Observable<todoOutput> {
-    // Replace with actual implementation
-    return of(payload);
+    return this.http.post<todoOutput>(this.API_URL, payload);
   }
 
   updateTodo(payload: todoOutput): Observable<todoOutput> {
-    // Replace with actual implementation
-    return of(payload);
+    return this.http.put<todoOutput>(`${this.API_URL}/${payload.id}`, payload);
   }
 
   deleteTodo(id: number): Observable<any> {
-    // Replace with actual implementation
-    return of(null);
+    return this.http.delete(`${this.API_URL}/${id}`);
   }
 }

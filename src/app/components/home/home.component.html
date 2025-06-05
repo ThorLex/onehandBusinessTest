@@ -1,9 +1,101 @@
 <div>
-  <input #search class="search"
-    type="text"
-    placeholder="Search..." (keydown.enter)="onSearch(search.value)">
-  <angular2-smart-table
-    [settings]="settings"
-   [source]="data">
-  </angular2-smart-table>
-</div>
+<div class="bg-blue-100 font-sans">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 m-3  bg-white border-r border-gray-200 p-4">
+            <!-- Add New Task Button -->
+            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-4 rounded-md mb-6 flex items-center justify-center space-x-2 text-sm font-medium">
+                <i class="fas fa-plus text-xs"></i>
+                <span>Add New Task</span>
+            </button>
+
+            <!-- Navigation -->
+            <nav class="space-y-1 mb-8">
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 text-blue-600 bg-blue-50 rounded-md text-sm">
+                    <i class="fas fa-inbox w-4 text-sm"></i>
+                    <span>All</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
+                    <i class="fas fa-star w-4 text-sm"></i>
+                    <span>Priority</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
+                    <i class="fas fa-calendar w-4 text-sm"></i>
+                    <span>Today</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
+                    <i class="fas fa-check w-4 text-sm"></i>
+                    <span>Completed</span>
+                </a>
+            </nav>
+
+            <!-- Labels -->
+            <div>
+                <h3 class="text-xs font-medium text-gray-500 mb-3 uppercase tracking-wider">Labels</h3>
+                <nav class="space-y-1">
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span>Inbox</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
+                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Chat</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <span>Sent</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-sm">
+                        <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <span>Library</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 m-3 bg-white">
+            <!-- Header -->
+            <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <input type="checkbox" class="rounded border-gray-300 text-blue-600">
+                    <button class="p-1.5 hover:bg-gray-100 rounded">
+                        <i class="fas fa-archive text-gray-500 text-sm"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 max-w-md mx-8">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+                          <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-2 bg-gray-50 rounded-full border-0 focus:outline-none focus:bg-white focus:shadow-sm text-sm" (input)="onSearch($event)">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 text-sm text-gray-500">
+                    <span>{{ (currentPage - 1) * pageSize + 1 }}-{{ Math.min(currentPage * pageSize, filteredSource.length) }} of {{ filteredSource.length }}</span>
+                    <button class="p-1 hover:bg-gray-100 rounded" [disabled]="currentPage === 1" (click)="goToPreviousPage()">
+                        <i class="fas fa-chevron-left text-gray-400"></i>
+                    </button>
+                    <button class="p-1 hover:bg-gray-100 rounded" [disabled]="currentPage * pageSize >= filteredSource.length" (click)="goToNextPage()">
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Task List -->
+            <div class="divide-y divide-gray-100 overflow-x-auto" style="max-width: 100%;">
+              <angular2-smart-table
+                [settings]="settings"
+                [source]="pagedSource"
+                class="custom-smart-table min-w-full"
+                [attr.data-testid]="'task-table'"
+                style="background:transparent; border:none; min-width: 800px;"
+              >
+              </angular2-smart-table>
+            </div>
+
+        </main>
+    </div>
+  </div>
+  </div>
+

@@ -1,7 +1,9 @@
+import { personOutput } from "todolib";
+
 export interface todoOutput {
   id: number;
   title: string;
-  person: number;
+  person: personOutput;
   startDate: string;
   endDate: string | null;
   priority: 'Facile' | 'Moyen' | 'Difficile';

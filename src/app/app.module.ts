@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { TodoState } from 'todolib';
 import { personState } from 'todolib';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 @NgModule({
@@ -17,6 +18,9 @@ import { personState } from 'todolib';
     ]),
 
   ],
-  bootstrap: []
+  bootstrap: [],
+  providers: [
+    provideAnimationsAsync()
+  ]
 })
 export class AppModule {}

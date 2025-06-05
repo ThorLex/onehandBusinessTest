@@ -3,4 +3,7 @@ export interface personOutput {
   name: string;
   email: string;
   phone: string;
+  avatar: string;
+  createdAt: string;
+  updatedAt: string;
 }

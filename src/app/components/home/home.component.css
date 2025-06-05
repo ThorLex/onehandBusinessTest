@@ -1,14 +1,29 @@
-.search {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* Prevent table overflow and enable horizontal scroll */
+.divide-y.divide-gray-100 {
+  overflow-x: auto;
+  max-width: 100%;
 }
 
-:host {
-    display: block;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+.custom-smart-table {
+  min-width: 800px;
+}
+
+/* Optional: Style the scrollbar for better UX */
+.divide-y.divide-gray-100::-webkit-scrollbar {
+  height: 8px;
+}
+.divide-y.divide-gray-100::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+/* Responsive fix for small screens */
+@media (max-width: 900px) {
+  .custom-smart-table {
+    min-width: 600px;
+  }
+}
+
+::ng-deep thead {
+  display: none;
 }
