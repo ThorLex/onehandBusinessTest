@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Store, Select } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
-import { GetTodos, TodoState, AddTodo, UpdateTodo, GetPersons, personState, todoOutput } from 'todolib'; // Assuming you have AddTodo and UpdateTodo actions in todolib
+import { GetTodos, TodoState, AddTodo, UpdateTodo, GetPersons, personState, todoOutput, personOutput } from 'todolib'; // Assuming you have AddTodo and UpdateTodo actions in todolib
 import { Angular2SmartTableModule, LocalDataSource, Settings } from 'angular2-smart-table';
 import { MatDialog } from '@angular/material/dialog';
 import { personInput , todoInput } from 'todolib';
@@ -95,68 +95,54 @@ export class HomeComponent implements OnInit {
 
   // Configuration du Smart Table
   settings: Settings = {
-    columns: {
-      avatar: {
-        title: '',
-        type: 'html' ,
-        valuePrepareFunction: (value: todoInput) => {
-          return `<img src="${value.person?.avatar || 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b'}" alt="Avatar" style="width: 48px; height: 48px; border-radius: 50%;">`;
-        },
 
-        width: '48px',
+    columns: {
+  iscompleted: {
+        title: 'iscompleted',
+        type: 'html',
+        valuePrepareFunction: (value: todoInput) => {
+         if (!value.iscomplete ||undefined) {
+            return `
+            <mat-checkbox [checked]="true" disabled></mat-checkbox>`;
+          }
+          return `
+            <mat-checkbox [checked]="false" disabled></mat-checkbox>`;
+        },
       },
-      title: {
-        title: 'Titre',
-        type: 'text',
-      },
-      person: {
+
+     person: {
         title: 'Personne',
         type: 'html',
-        valuePrepareFunction: (value: todoInput) => {
-          return this.allTodos  ? `<span class="text-blue-600">${value.person.name[2]}</span>` : 'Aucune personne assignée';
+ // You can set a custom component if needed
+        valuePrepareFunction: (value: personOutput) => {
+          return `<img src="${value.avatar || 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b'}" alt="Avatar"">`;
         },
-
-
-
+ width: '50px',
       },
 
-      priority: {
-        title: 'Priorité',
-        type: 'html',
 
+      description: {
+        title: 'description',
+        type: 'text',
       },
+
+
       labels: {
         title: 'Labels',
         type: 'html',
 
       },
-      description: {
-        title: 'Description',
-        type: 'text',
-      },
-      actions: {
-        title: 'Actions',
-        type: 'html',
 
-
-      }
     },
     actions: {
-      columnTitle: '',
-      add: false,
-      edit: false,
-      delete: false,
       custom: [
-        { name: 'edit', title: '<i class="material-icons">edit</i>' }
+        { name: 'checked', title: '<mat-icon>edit</mat-icon>' ,
+          renderComponent: TodoCheckboxComponent,
+        }
       ],
-      position: 'right'
+      position: 'left',
     },
-    edit: {
-      editButtonContent: '<mat-icon>edit</mat-icon>',
-    },
-    delete: {
-      deleteButtonContent: '<mat-icon>delete</mat-icon>',
-    },
+
     hideSubHeader: true,
     pager: {
       display: false
@@ -167,6 +153,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTodos()
+
   }
 
   // Chargement des données

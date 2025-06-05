@@ -1,6 +1,7 @@
 import { personInput } from "todolib";
 
 export  interface todoInput {
+  iscomplete?: boolean;
   id: number|null;
   title: string;
   person: personInput;
