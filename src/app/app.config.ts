@@ -14,7 +14,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideClientHydration(),
-    provideHttpClient(),
     provideHttpClient(withFetch()),
     importProvidersFrom(
       NgxsModule.forRoot([TodoState, personState], {

@@ -1,4 +1,4 @@
-import { FormComponent } from './../form/form.component';
+ import { FormComponent } from './../form/form.component';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,30 +7,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Store, Select } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
-import { GetTodos, TodoState, AddTodo, UpdateTodo } from 'todolib'; // Assuming you have AddTodo and UpdateTodo actions in todolib
+import { GetTodos, TodoState, AddTodo, UpdateTodo, GetPersons, personState, todoOutput } from 'todolib'; // Assuming you have AddTodo and UpdateTodo actions in todolib
 import { Angular2SmartTableModule, LocalDataSource, Settings } from 'angular2-smart-table';
 import { MatDialog } from '@angular/material/dialog';
+import { personInput , todoInput } from 'todolib';
 
-interface Person {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
-interface TodoItem {
-  id: number;
-  title: string;
-  person: Person;
-  startDate: string;
-  endDate: string | null;
-  priority: 'Facile' | 'Moyen' | 'Difficile';
-  labels: Array<'HTML' | 'CSS' | 'NODE JS' | 'JQUERY'>;
-  description: string;
-}
+
 
 interface NavigationItem {
   label: string;
@@ -64,21 +47,16 @@ interface LabelItem {
   ]
 })
 export class HomeComponent implements OnInit {
-  @Select(TodoState.getTodos) todos$!: Observable<TodoItem[]>;
+  @Select(TodoState.getTodos) todos$!: Observable<todoInput[]>;
+  @Select(personState.getpersons) persons$!: Observable<personInput[]>;
 
   // Données
   source = new LocalDataSource();
-  allTodos: TodoItem[] = [];
-  filteredTodos: TodoItem[] = [];
+  allTodos: todoInput[] = [];
+  filteredTodos: todoInput[] = [];
 
-  // Assuming you have a list of all possible people for the autocomplete
-  // This would typically come from a service or another state
-  allPeople: Person[] = [
-    { id: 1, name: 'Alice Smith', email: 'alice@example.com', phone: '111-222-3333', avatar: 'https://i.pravatar.cc/150?img=1', createdAt: '', updatedAt: '' },
-    { id: 2, name: 'Bob Johnson', email: 'bob@example.com', phone: '444-555-6666', avatar: 'https://i.pravatar.cc/150?img=2', createdAt: '', updatedAt: '' },
-    { id: 3, name: 'Charlie Brown', email: 'charlie@example.com', phone: '777-888-9999', avatar: 'https://i.pravatar.cc/150?img=3', createdAt: '', updatedAt: '' },
-    { id: 4, name: 'Diana Prince', email: 'diana@example.com', phone: '123-456-7890', avatar: 'https://i.pravatar.cc/150?img=4', createdAt: '', updatedAt: '' },
-  ];
+
+  allPeople: personInput[] = [];
 
   // États
   errorMessage: string | null = null;
@@ -196,6 +174,7 @@ export class HomeComponent implements OnInit {
   // Chargement des données
   private loadTodos(): void {
     this.store.dispatch(new GetTodos());
+    this.store.dispatch(new GetPersons());
     this.initialLoading = true;
 
     this.todos$.subscribe({
@@ -212,6 +191,17 @@ export class HomeComponent implements OnInit {
         this.filteredTodos = [];
         this.source.load([]);
         this.initialLoading = false;
+      }
+    });
+
+    this.persons$.subscribe({
+      next: (persons) => {
+        this.allPeople = persons;
+        this.updateCounts();
+      },
+      error: (err) => {
+        console.error("Erreur lors du chargement des personnes:", err);
+        this.allPeople = [];
       }
     });
   }
@@ -251,7 +241,7 @@ export class HomeComponent implements OnInit {
     this.updateTableSource();
   }
 
-  private sortData(data: TodoItem[]): TodoItem[] {
+  private sortData(data: todoInput[]): todoInput[] {
     return data.sort((a, b) => {
       let aValue: any = (a as any)[this.sortBy];
       let bValue: any = (b as any)[this.sortBy];
@@ -292,7 +282,7 @@ export class HomeComponent implements OnInit {
       this.activeLabelFilters.push(label);
     }
 
-    // Mise à jour de l'état actif
+
     const labelItem = this.labels.find(l => l.label === label);
     if (labelItem) {
       labelItem.active = this.activeLabelFilters.includes(label);
@@ -301,18 +291,21 @@ export class HomeComponent implements OnInit {
     this.applyFiltersAndSearch();
   }
 
-  // Gestion de la recherche
+
   onSearch(): void {
     this.applyFiltersAndSearch();
   }
 
-  // Gestion du tri
+
   onSortChange(): void {
     this.applyFiltersAndSearch();
   }
 
-  // Gestion de la pagination
+
   goToPreviousPage(): void {
+
+    console.log('goToPreviousPage called');
+    console.log('Current page before decrement:', this.currentPage);
     if (this.currentPage > 1) {
       this.currentPage--;
       this.updateTableSource();
@@ -320,6 +313,8 @@ export class HomeComponent implements OnInit {
   }
 
   goToNextPage(): void {
+    console.log('goToNextPage called');
+    console.log('Current page before increment:', this.currentPage);
     const maxPages = Math.ceil(this.totalItems / this.itemsPerPage);
     if (this.currentPage < maxPages) {
       this.currentPage++;
@@ -335,10 +330,7 @@ export class HomeComponent implements OnInit {
 
   // Mise à jour des compteurs
   private updateCounts(): void {
-    // Mise à jour du compteur principal
     this.navigationItems[0].count = this.filteredTodos.length;
-
-    // Mise à jour des compteurs de labels
     this.labels.forEach(label => {
       label.count = this.allTodos.filter(todo =>
         todo.labels.includes(label.label as any)
@@ -347,8 +339,8 @@ export class HomeComponent implements OnInit {
   }
 
   // Gestion des événements de navigation
-  onNavigationClick(item: NavigationItem): void {
-    console.log('Navigation clicked:', item.label);
+  onNavigationClick(item: NavigationItem ): void {
+    console.log('Navigation clicked:', item?.label);
   }
 
   onLabelClick(label: LabelItem): void {
@@ -357,30 +349,29 @@ export class HomeComponent implements OnInit {
 
   // Ajout d'une nouvelle tâche
   onAddNewTask(): void {
-    this.openTaskModal(null); // Open modal for adding a new task
+    this.openTaskModal(null);
   }
 
-  // Édition d'une tâche existante
-  onEditTask(task: TodoItem): void {
-    this.openTaskModal(task); // Open modal for editing an existing task
+
+  onEditTask(task: todoInput): void {
+    this.openTaskModal(task);
   }
 
-  openTaskModal(task: TodoItem | null): void {
+  openTaskModal(task: todoInput | null): void {
+    console.log('bonjour a tous ')
     const dialogRef = this.dialog.open(FormComponent, {
       width: '600px',
-      data: { task: task, allPeople: this.allPeople } // Pass existing task data and all people
+      data: { task: task, allPeople: this.allPeople }
     });
 
-    dialogRef.componentInstance.saveTask.subscribe((savedTask: TodoItem) => {
+    dialogRef.componentInstance.saveTask.subscribe((savedTask: todoOutput) => {
       if (savedTask.id) {
-        // Update existing task
-        this.store.dispatch(new UpdateTodo(savedTask)); // Assuming you have an UpdateTodo action
+        this.store.dispatch(new UpdateTodo(savedTask));
       } else {
-        // Add new task with a generated ID (for demonstration, in real app, backend would provide ID)
-        const newId = Math.max(...this.allTodos.map(t => t.id)) + 1;
-        this.store.dispatch(new AddTodo({ ...savedTask, id: newId })); // Assuming you have an AddTodo action
+        const newId = Math.max(...this.allTodos.map(t => t.id as number)) + 1;
+        this.store.dispatch(new AddTodo({ ...savedTask, id: newId }));
       }
-      this.loadTodos(); // Reload to reflect changes
+      this.loadTodos();
     });
 
     dialogRef.componentInstance.cancel.subscribe(() => {

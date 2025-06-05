@@ -14,27 +14,13 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable, of } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { GetPersons } from 'todolib';
+import { Store } from '@ngxs/store';
+import { personInput,todoInput } from 'todolib';
 
-interface Person {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
-interface TodoItem {
-  id?: number; // Optional for new tasks
-  title: string;
-  person: Person;
-  startDate: string;
-  endDate: string | null;
-  priority: 'Facile' | 'Moyen' | 'Difficile';
-  labels: Array<'HTML' | 'CSS' | 'NODE JS' | 'JQUERY'>;
-  description: string;
-}
+
+
 
 @Component({
   selector: 'app-form',
@@ -58,21 +44,23 @@ interface TodoItem {
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
-  @Input() task: TodoItem | null = null;
-  @Input() allPeople: Person[] = []; // List of all available people
-  @Output() saveTask = new EventEmitter<TodoItem>();
+  @Input() task: todoInput | null = null;
+  @Input() allPeople: personInput[] = []; // List of all available people
+  @Output() saveTask = new EventEmitter<todoInput>();
   @Output() cancel = new EventEmitter<void>();
 
   taskForm: FormGroup;
   isEditMode = false;
 
-  filteredPeople: Observable<Person[]>;
+  filteredPeople: Observable<personInput[]>;
   labelInput = { nativeElement: { value: '' } }; // Mock for label input element
   labelCtrl = new FormControl();
   availableLabels: Array<'HTML' | 'CSS' | 'NODE JS' | 'JQUERY'> = ['HTML', 'CSS', 'NODE JS', 'JQUERY'];
   filteredLabels: Observable<string[]>;
 
-  constructor(public dialogRef: MatDialogRef<FormComponent>) {
+  constructor(public dialogRef: MatDialogRef<FormComponent>,
+    private store: Store,
+  ) {
     this.taskForm = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.minLength(3)]),
       person: new FormControl(null, [Validators.required, this.personNameMinLengthValidator, this.personUniqueNameValidator]),
@@ -94,7 +82,7 @@ export class FormComponent implements OnInit {
       startWith(null),
       map((label: string | null) => (label ? this._filterLabels(label) : this.availableLabels.slice())),
     );
-  }
+}
 
   ngOnInit(): void {
     if (this.task) {
@@ -112,9 +100,13 @@ export class FormComponent implements OnInit {
     }
   }
 
+  getPersons(){
+this.store.dispatch(new GetPersons());
+  }
+
   // Custom validator for person name min length (after trim)
   personNameMinLengthValidator(control: FormControl): { [key: string]: any } | null {
-    const person = control.value as Person;
+    const person = control.value as personInput;
     if (person && typeof person.name === 'string' && person.name.trim().length < 3) {
       return { 'personNameMinLength': true };
     }
@@ -123,7 +115,7 @@ export class FormComponent implements OnInit {
 
   // Custom validator for unique person name (considering allPeople)
   personUniqueNameValidator = (control: FormControl): { [key: string]: any } | null => {
-    const person = control.value as Person;
+    const person = control.value as personInput;
     if (person && typeof person.name === 'string' && this.allPeople) {
       const foundPerson = this.allPeople.find(p => p.name.trim().toLowerCase() === person.name.trim().toLowerCase());
       if (foundPerson && (!this.isEditMode || (this.isEditMode && this.task && foundPerson.id !== this.task.person.id))) {
@@ -133,14 +125,14 @@ export class FormComponent implements OnInit {
     return null;
   }
 
-  // Helper to display person name in autocomplete
-  displayPersonName(person: Person): string {
-    return person ? person.name : '';
+  // Helper to display personInput name in autocomplete
+  displayPersonName(personInput: personInput): string {
+    return personInput ? personInput.name : '';
   }
 
-  private _filterPeople(value: string): Person[] {
+  private _filterPeople(value: string): personInput[] {
     const filterValue = value.toLowerCase();
-    return this.allPeople.filter(person => person.name.toLowerCase().includes(filterValue));
+    return this.allPeople.filter(personInput => personInput.name.toLowerCase().includes(filterValue));
   }
 
   getErrorMessage(controlName: string): string {
@@ -220,8 +212,9 @@ export class FormComponent implements OnInit {
   onSave(): void {
     if (this.taskForm.valid) {
       const formValue = this.taskForm.getRawValue(); // Use getRawValue to get disabled field values
-      const savedTask: TodoItem = {
-        ...this.task, // Keep existing ID if in edit mode
+      const savedTask: todoInput = {
+        ...this.task,
+        id: this.task?.id as number,// Keep existing ID if in edit mode
         title: formValue.title.trim(),
         person: formValue.person,
         startDate: formValue.startDate.toISOString().split('T')[0], // Format as YYYY-MM-DD

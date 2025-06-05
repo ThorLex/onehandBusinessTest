@@ -1,7 +1,7 @@
 import { personInput } from "todolib";
 
 export  interface todoInput {
-  id: number;
+  id: number|null;
   title: string;
   person: personInput;
   startDate: string;
