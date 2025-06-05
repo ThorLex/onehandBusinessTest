@@ -11,6 +11,7 @@ import { GetTodos, TodoState, AddTodo, UpdateTodo, GetPersons, personState, todo
 import { Angular2SmartTableModule, LocalDataSource, Settings } from 'angular2-smart-table';
 import { MatDialog } from '@angular/material/dialog';
 import { personInput , todoInput } from 'todolib';
+import { TodoCheckboxComponent } from './todo-checkbox/todo-checkbox.component';
 
 
 
@@ -97,18 +98,7 @@ export class HomeComponent implements OnInit {
   settings: Settings = {
 
     columns: {
-  iscompleted: {
-        title: 'iscompleted',
-        type: 'html',
-        valuePrepareFunction: (value: todoInput) => {
-         if (!value.iscomplete ||undefined) {
-            return `
-            <mat-checkbox [checked]="true" disabled></mat-checkbox>`;
-          }
-          return `
-            <mat-checkbox [checked]="false" disabled></mat-checkbox>`;
-        },
-      },
+
 
      person: {
         title: 'Personne',
@@ -135,8 +125,14 @@ export class HomeComponent implements OnInit {
 
     },
     actions: {
+
+   add: false,
+  edit: false,
+  delete: false,
+
+
       custom: [
-        { name: 'checked', title: '<mat-icon>edit</mat-icon>' ,
+        { name: 'checked',
           renderComponent: TodoCheckboxComponent,
         }
       ],
