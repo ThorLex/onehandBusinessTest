@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "concurrently \"ng serve\" \"npm run json-server\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -30,6 +30,7 @@
     "@tailwindcss/postcss": "^4.1.8",
     "angular2-smart-table": "^3.6.2",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
     "express": "^4.18.2",
     "json-server": "^1.0.0-beta.3",
     "rxjs": "~7.8.0",
