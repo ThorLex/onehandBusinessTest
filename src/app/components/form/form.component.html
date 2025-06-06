@@ -1,97 +1,91 @@
-<div class="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg p-6">
-  <h2 class="text-xl font-bold mb-4 text-center">{{ isEditMode ? 'Modifier la tâche' : 'Ajouter une nouvelle tâche' }}</h2>
-  <form [formGroup]="taskForm" (ngSubmit)="onSave()" autocomplete="off">
-    <!-- Titre de la tâche -->
-    <div class="mb-4">
-      <label class="block text-gray-700 font-semibold mb-1">Titre de la tâche</label>
-      <input type="text" formControlName="title" placeholder="Entrez le titre de la tâche"
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+  <div class="w-full max-w-2xl bg-white rounded-lg shadow-xl max-h-[90vh] flex flex-col">
+    <h2 class="text-3xl font-extrabold text-center text-gray-800 p-6 border-b">{{ isEditMode ? 'Modifier la tâche' : 'Ajouter une nouvelle tâche' }}</h2>
+
+    <div class="overflow-y-auto flex-1 p-8">
+      <form [formGroup]="taskForm" (ngSubmit)="onSave()" autocomplete="off">
+    <div class="mb-5">
+      <label for="title" class="block text-gray-700 font-medium mb-2">Titre de la tâche</label>
+      <input type="text" id="title" formControlName="title" placeholder="Entrez le titre de la tâche"
         [ngClass]="{'border-red-500': isInvalid('title')}"
-        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <div *ngIf="isInvalid('title')" class="text-red-500 text-xs mt-1">{{ getErrorMessage('title') }}</div>
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+      <div *ngIf="isInvalid('title')" class="text-red-600 text-sm mt-1">{{ getErrorMessage('title') }}</div>
     </div>
 
-    <!-- Assigner à (Autocomplete) -->
-    <div class="mb-4">
-      <label class="block text-gray-700 font-semibold mb-1">Assigner à</label>
-      <input type="text" placeholder="Sélectionnez une personne" aria-label="Staff"
+    <div class="mb-5">
+      <label for="person" class="block text-gray-700 font-medium mb-2">Assigner à</label>      <select id="person" formControlName="person"
         [ngClass]="{'border-red-500': isInvalid('person')}"
-        [value]="displayPersonName(taskForm.get('person')?.value)"
-        (input)="onPersonInput($event)"
-        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" list="people-list" />
-      <datalist id="people-list">
-        <option *ngFor="let option of filteredPeople | async" [value]="option.name"></option>
-      </datalist>
-      <div *ngIf="isInvalid('person')" class="text-red-500 text-xs mt-1">{{ getErrorMessage('person') }}</div>
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <option value="">Sélectionnez une personne</option>
+        <option *ngFor="let person of persons" [ngValue]="person">{{ person.name }}</option>
+      </select>
+      <div *ngIf="isInvalid('person')" class="text-red-600 text-sm mt-1">{{ getErrorMessage('person') }}</div>
     </div>
 
-    <!-- Dates -->
-    <div class="flex gap-4 mb-4">
-      <div class="flex-1">
-        <label class="block text-gray-700 font-semibold mb-1">Date de début</label>
-        <input type="date" formControlName="startDate"
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+      <div>
+        <label for="startDate" class="block text-gray-700 font-medium mb-2">Date de début</label>
+        <input type="date" id="startDate" formControlName="startDate"
           [ngClass]="{'border-red-500': isInvalid('startDate')}"
-          class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        <div *ngIf="isInvalid('startDate')" class="text-red-500 text-xs mt-1">{{ getErrorMessage('startDate') }}</div>
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+        <div *ngIf="isInvalid('startDate')" class="text-red-600 text-sm mt-1">{{ getErrorMessage('startDate') }}</div>
       </div>
-      <div class="flex-1">
-        <label class="block text-gray-700 font-semibold mb-1">Date de fin</label>
-        <input type="date" formControlName="endDate" [disabled]="taskForm.get('endDate')?.disabled || false"
+      <div>
+        <label for="endDate" class="block text-gray-700 font-medium mb-2">Date de fin</label>
+        <input type="date" id="endDate" formControlName="endDate" [disabled]="taskForm.get('endDate')?.disabled || false"
           [ngClass]="{'border-red-500': isInvalid('endDate')}"
-          class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-100 disabled:opacity-70" />
-        <div *ngIf="isInvalid('endDate')" class="text-red-500 text-xs mt-1">{{ getErrorMessage('endDate') }}</div>
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 disabled:opacity-70 disabled:cursor-not-allowed" />
+        <div *ngIf="isInvalid('endDate')" class="text-red-600 text-sm mt-1">{{ getErrorMessage('endDate') }}</div>
       </div>
     </div>
 
-    <!-- Tâche terminée -->
-    <div class="mb-4 flex items-center gap-2">
-      <input type="checkbox" formControlName="isCompleted" (change)="onCompletionCheckbox($event)" class="accent-blue-600" />
-      <span class="text-gray-700">Tâche terminée</span>
+    <div class="mb-5 flex items-center gap-3">
+      <input type="checkbox" id="isCompleted" formControlName="isCompleted" (change)="onCompletionCheckbox($event)" class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 accent-blue-600 cursor-pointer" />
+      <label for="isCompleted" class="text-gray-700 font-medium">Tâche terminée</label>
     </div>
 
-    <!-- Priorité -->
-    <div class="mb-4">
-      <label class="block text-gray-700 font-semibold mb-1">Priorité</label>
-      <select formControlName="priority" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+    <div class="mb-5">
+      <label for="priority" class="block text-gray-700 font-medium mb-2">Priorité</label>
+      <select id="priority" formControlName="priority" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         <option value="Facile">Facile</option>
         <option value="Moyen">Moyen</option>
         <option value="Difficile">Difficile</option>
       </select>
-      <div *ngIf="isInvalid('priority')" class="text-red-500 text-xs mt-1">{{ getErrorMessage('priority') }}</div>
+      <div *ngIf="isInvalid('priority')" class="text-red-600 text-sm mt-1">{{ getErrorMessage('priority') }}</div>
     </div>
 
-    <!-- Labels (Chips) -->
-    <div class="mb-4">
-      <label class="block text-gray-700 font-semibold mb-1">Labels</label>
-      <div class="flex flex-wrap gap-2 mb-2">
-        <span *ngFor="let label of taskForm.get('labels')?.value" class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full flex items-center">
+    <div class="mb-5">
+      <label class="block text-gray-700 font-medium mb-2">Labels</label>
+      <div class="flex flex-wrap gap-2 mb-3">
+        <span *ngFor="let label of taskForm.get('labels')?.value" class="bg-blue-200 text-blue-800 px-3 py-1.5 rounded-full flex items-center text-sm font-medium">
           {{label}}
-          <button type="button" (click)="removeLabel(label)" class="ml-1 text-xs text-red-500 hover:text-red-700">&times;</button>
+          <button type="button" (click)="removeLabel(label)" class="ml-2 text-blue-600 hover:text-blue-900 focus:outline-none" aria-label="Supprimer le label">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
         </span>
       </div>
-      <input type="text" placeholder="Ajouter des labels" [formControl]="labelCtrl"
-        (keydown.enter)="onLabelInputEnter($event)"
-        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <div class="flex flex-wrap gap-2 mt-2">
+      <input type="text" placeholder="Ajouter des labels" [formControl]="labelCtrl" #labelInput
+        (keydown.enter)="onLabelInputEnter(getEvent($event))"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+      <div class="flex flex-wrap gap-2 mt-3">
         <button type="button" *ngFor="let label of filteredLabels | async" (click)="selectedLabel({option: {viewValue: label}})"
-          class="bg-gray-200 hover:bg-blue-200 text-gray-700 px-2 py-1 rounded-full text-xs">
+          class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs font-medium transition-colors duration-200">
           {{label}}
         </button>
       </div>
     </div>
 
-    <!-- Description -->
-    <div class="mb-4">
-      <label class="block text-gray-700 font-semibold mb-1">Description</label>
-      <textarea formControlName="description" rows="4" placeholder="Description de la tâche"
-        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+    <div class="mb-6">
+      <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>
+      <textarea id="description" formControlName="description" rows="4" placeholder="Description de la tâche"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"></textarea>
     </div>
 
-    <!-- Actions -->
-    <div class="flex justify-end gap-2 mt-6">
-      <button type="button" (click)="onCancel()" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700">Annuler</button>
-      <button type="submit" [disabled]="taskForm.invalid" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
+    <div class="flex justify-end gap-3 mt-6">
+      <button type="button" (click)="onCancel()" class="px-5 py-2.5 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200 font-medium">Annuler</button>
+      <button type="submit" [disabled]="taskForm.invalid" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200 font-medium">
         {{ isEditMode ? 'Modifier' : 'Ajouter' }}
-      </button>
-    </div>
-  </form>
+      </button>      </div>
+    </form>
+  </div>
 </div>

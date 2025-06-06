@@ -1,7 +1,21 @@
+<!-- le delete est ok le add aussi  mais  la manipulation du tableau le derange beaucoup -->
+  <div class="">
+        @for (item of allTodos; track $index) {
+          <div> <table>
+          <tbody>
+              <tr>
+           <td  (click)="onEditTask(item)">{{item.id}}<tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+        }
+      </div>
 <div class="min-h-screen bg-blue-50 p-4">
   <div class="flex h-screen bg-white rounded-lg shadow-sm overflow-hidden">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-gray-200 p-4">
+    <aside class="w-64 m-4 bg-white border-r border-gray-200 p-4">
       <!-- Add New Task Button -->
       <div class="flex items-center mb-6 px-2">
         <button
@@ -83,7 +97,7 @@
     <!-- Main Content -->
     <main class="flex-1 overflow-auto">
       <!-- Header -->
-      <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <div class="border-b border-gray-200 px-6 py-4 flex ">
         <div class="flex items-center space-x-4">
           <input type="checkbox" class="rounded border-gray-300">
           <button class="p-1 hover:bg-gray-50 rounded transition-colors">
@@ -124,7 +138,7 @@
           </div>
         </div>
 
-        <div class="flex items-center space-x-2 text-xs text-gray-500">
+        <div class="flex ml-[290px] items-center space-x-2 text-xs text-gray-500">
           <span class="bg-blue-50 px-3 py-2 rounded-lg font-medium">{{ getCurrentRange() }}</span>
           <button
             (click)="goToPreviousPage()"
@@ -163,6 +177,8 @@
           </div>
         </div>
       </div>
+
+
 
       <!-- Smart Table -->
       <div *ngIf="!initialLoading && !errorMessage" class="p-4">

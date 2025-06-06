@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Store, Select } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
-import { GetTodos, TodoState, AddTodo, UpdateTodo, GetPersons, personState, todoOutput, personOutput } from 'todolib'; // Assuming you have AddTodo and UpdateTodo actions in todolib
+import { GetTodos, TodoState, AddTodo, UpdateTodo, DeleteTodo, GetPersons, personState, todoOutput, personOutput } from 'todolib';
 import { Angular2SmartTableModule, LocalDataSource, Settings } from 'angular2-smart-table';
 import { MatDialog } from '@angular/material/dialog';
 import { personInput , todoInput } from 'todolib';
@@ -128,29 +128,70 @@ export class HomeComponent implements OnInit {
             'NODE JS': '#22c55e',
             'JQUERY': '#a21caf'
           };
-          return value.map(label => `
-            <span style="display:inline-flex;align-items:center;margin-right:6px;">
-              <svg width="24" height="24" viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:${labelColors[label] || '#000'};vertical-align:middle;">
-                <path d="M20 20 L140 20 L140 20 Q150 20 155 25 L180 50 L155 75 Q150 80 140 80 L20 80 Q10 80 10 70 L10 30 Q10 20 20 20 Z" fill="currentColor" stroke="currentColor" stroke-width="2"/>
-              </svg>
-            </span>
-          `).join('');
+            return value.map(label => {
+            let icon = '';
+            let bgColor = '';
+            switch (label) {
+              case 'HTML':
+              bgColor = 'text-orange-500';
+              break;
+              case 'CSS':
+
+              bgColor = 'text-blue-500';
+              break;
+              case 'NODE JS':
+
+              bgColor = 'text-green-500';
+              break;
+              case 'JQUERY':
+              icon = '';
+              bgColor = 'text-purple-500';
+              break;
+              default:
+              icon = '';
+              bgColor = 'text-gray-400';
+            }
+
+            return `
+            <span class="material-icons outlined ${bgColor}">label</span>
+
+            `;
+            }).join('');
         },
 
+
       },
+      priority: {
+        title: 'Priorité',
+        type: 'html',
+        valuePrepareFunction: (value: string) => {
+          const colors: { [key: string]: string } = {
+            'Haute': 'bg-red-500',
+            'Moyenne': 'bg-yellow-500',
+            'Basse': 'bg-green-500'
+          };
+          return `<span class="inline-block px-2 py-1 rounded ${colors[value] || 'bg-gray-300'} text-white">${value}</span>`;
+        },
+      },
+      startDate : {
+        title: "endDate",
+type: 'html',
+        valuePrepareFunction: (value: string) => {
+          return `<span class="inline-block px-2 py-1 rounded'} "> demaré le ${new Date(value)}</span>`;
+        },
+  }
+
+
 
     },
     actions: {
-
-   add: false,
-  edit: false,
-  delete: false,
-
-
+      add: false,
       custom: [
-        { name: 'checked',
+        {
+          name: 'checked',
           renderComponent: TodoCheckboxComponent,
         }
+
       ],
       position: 'left',
     },
@@ -161,7 +202,24 @@ export class HomeComponent implements OnInit {
     }
   };
 
-  constructor(private store: Store, private dialog: MatDialog) { }
+  constructor(private store: Store, private dialog: MatDialog) {
+    this.settings = {
+      ...this.settings,
+      edit: {
+        confirmSave: true,
+      },
+      delete: {
+        confirmDelete: true,
+      },
+      actions: {
+        ...this.settings.actions,
+        edit: true,
+        delete: true,
+      }
+    };
+
+
+  }
 
   ngOnInit(): void {
     this.loadTodos()
@@ -351,7 +409,7 @@ export class HomeComponent implements OnInit {
   }
 
   openTaskModal(task: todoInput | null): void {
-    console.log('bonjour a tous ')
+
     const dialogRef = this.dialog.open(FormComponent, {
       width: '600px',
       data: { task: task, allPeople: this.allPeople }
@@ -370,6 +428,14 @@ export class HomeComponent implements OnInit {
     dialogRef.componentInstance.cancel.subscribe(() => {
       console.log('Modal cancelled');
     });
+  }
+
+  deleteTask(task: todoInput): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) {
+      this.store.dispatch(new DeleteTodo(task?.id as number)).subscribe(() => {
+        this.loadTodos();
+      });
+    }
   }
 
   // Getters utilitaires

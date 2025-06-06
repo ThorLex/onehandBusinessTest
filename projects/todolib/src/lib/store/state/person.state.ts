@@ -21,10 +21,29 @@ export interface personStateModel {
 @Injectable()
 export class personState {
   constructor(private personService: PersonService) {}
-
   @Selector()
   static getpersons(state: personStateModel) {
     return state.persons;
+  }
+
+  @Selector()
+  static getPersonById(state: personStateModel, id: number) {
+    return state.persons.find(person => person.id === id);
+  }
+
+  @Selector()
+  static personCount(state: personStateModel) {
+    return state.persons.length;
+  }
+
+  @Selector()
+  static getLastAddedPerson(state: personStateModel) {
+    return state.persons[0]; // Puisqu'on ajoute toujours au début du tableau
+  }
+
+  @Selector()
+  static hasPersons(state: personStateModel) {
+    return state.persons.length > 0;
   }
 
   @Action(GetPersons)

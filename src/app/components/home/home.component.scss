@@ -122,4 +122,28 @@
   .search-input {
     width: 100% !important;
   }
-}
+  .label-dot {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    background-color: #4caf50; /* Default green, override with specific classes */
+  }
+
+  .label-dot-urgent {
+    background-color: #f44336; // Red for urgent
+  }
+
+  .label-dot-important {
+    background-color: #ff9800; // Orange for important
+  }
+
+  .label-dot-normal {
+    background-color: #2196f3; // Blue for normal
+  }
+
+  .label-dot-low {
+    background-color: #9e9e9e; // Grey for low
+  }
+  }

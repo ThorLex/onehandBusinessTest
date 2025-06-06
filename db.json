@@ -72,7 +72,7 @@
     },
     {
       "id": "3",
-      "title": "Ajouter l'autocomplete pour les personnes",
+      "title": "bonjour bonsoir",
       "person": {
         "id": 3,
         "name": "Claire Durand",
@@ -82,7 +82,7 @@
         "createdAt": "2024-06-01T09:00:00Z",
         "updatedAt": "2024-06-01T09:00:00Z"
       },
-      "startDate": "2024-06-04T10:00:00Z",
+      "startDate": "2024-06-04",
       "endDate": null,
       "priority": "Moyen",
       "labels": [
@@ -92,17 +92,17 @@
     },
     {
       "id": "4",
-      "title": "Finaliser le design CSS",
+      "title": "hello hi",
       "person": {
-        "id": 1,
-        "name": "Alice Martin",
-        "email": "alice.martin@email.com",
-        "phone": "0601020304",
-        "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+        "id": "2",
+        "name": "Bob Dupont",
+        "email": "bob.dupont@email.com",
+        "phone": "0605060708",
+        "avatar": "https://randomuser.me/api/portraits/men/2.jpg",
         "createdAt": "2024-06-01T09:00:00Z",
         "updatedAt": "2024-06-01T09:00:00Z"
       },
-      "startDate": "2024-06-05T11:00:00Z",
+      "startDate": "2024-06-05",
       "endDate": null,
       "priority": "Moyen",
       "labels": [
@@ -133,7 +133,7 @@
     },
     {
       "id": "6",
-      "title": "Ajouter l'export PDF",
+      "title": "Ajouter l'export PDF en csv",
       "person": {
         "id": 3,
         "name": "Claire Durand",
@@ -143,35 +143,14 @@
         "createdAt": "2024-06-01T09:00:00Z",
         "updatedAt": "2024-06-01T09:00:00Z"
       },
-      "startDate": "2024-06-07T10:00:00Z",
+      "startDate": "2024-06-07",
       "endDate": null,
       "priority": "Difficile",
       "labels": [
         "NODE JS",
         "JQUERY"
       ],
-      "description": "Permettre l'export des tâches au format PDF."
-    },
-    {
-      "id": "7",
-      "title": "Mettre en place l'internationalisation",
-      "person": {
-        "id": 1,
-        "name": "Alice Martin",
-        "email": "alice.martin@email.com",
-        "phone": "0601020304",
-        "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
-        "createdAt": "2024-06-01T09:00:00Z",
-        "updatedAt": "2024-06-01T09:00:00Z"
-      },
-      "startDate": "2024-06-08T08:00:00Z",
-      "endDate": null,
-      "priority": "Moyen",
-      "labels": [
-        "HTML",
-        "CSS"
-      ],
-      "description": "Traduire l'application en anglais et français."
+      "description": "Permettre l'export des tâches au format PDF.kbuqrlq"
     },
     {
       "id": "8",
@@ -214,26 +193,6 @@
         "NODE JS"
       ],
       "description": "Permettre d'ajouter plusieurs labels à une tâche."
-    },
-    {
-      "id": "10",
-      "title": "Mettre à jour la librairie Angular",
-      "person": {
-        "id": 1,
-        "name": "Alice Martin",
-        "email": "alice.martin@email.com",
-        "phone": "0601020304",
-        "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
-        "createdAt": "2024-06-01T09:00:00Z",
-        "updatedAt": "2024-06-01T09:00:00Z"
-      },
-      "startDate": "2024-06-11T08:00:00Z",
-      "endDate": null,
-      "priority": "Difficile",
-      "labels": [
-        "NODE JS"
-      ],
-      "description": "Mettre à jour Angular et ses dépendances."
     },
     {
       "id": "11",
@@ -339,30 +298,10 @@
       "description": "Permettre de sélectionner plusieurs labels pour une tâche."
     },
     {
-      "id": "16",
-      "title": "Ajouter la gestion des priorités",
-      "person": {
-        "id": 1,
-        "name": "Alice Martin",
-        "email": "alice.martin@email.com",
-        "phone": "0601020304",
-        "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
-        "createdAt": "2024-06-01T09:00:00Z",
-        "updatedAt": "2024-06-01T09:00:00Z"
-      },
-      "startDate": "2024-06-17T08:00:00Z",
-      "endDate": null,
-      "priority": "Facile",
-      "labels": [
-        "CSS"
-      ],
-      "description": "Ajouter un filtre par priorité sur la liste des tâches."
-    },
-    {
       "id": "17",
       "title": "Créer la modale d'édition de tâche",
       "person": {
-        "id": 2,
+        "id": "2",
         "name": "Bob Dupont",
         "email": "bob.dupont@email.com",
         "phone": "0605060708",
@@ -370,7 +309,7 @@
         "createdAt": "2024-06-01T09:00:00Z",
         "updatedAt": "2024-06-01T09:00:00Z"
       },
-      "startDate": "2024-06-18T09:00:00Z",
+      "startDate": "2024-06-18",
       "endDate": null,
       "priority": "Moyen",
       "labels": [
@@ -378,26 +317,6 @@
         "NODE JS"
       ],
       "description": "Créer une modale pour éditer une tâche existante."
-    },
-    {
-      "id": "18",
-      "title": "Ajouter la gestion des dates de fin",
-      "person": {
-        "id": 3,
-        "name": "Claire Durand",
-        "email": "claire.durand@email.com",
-        "phone": "0609091011",
-        "avatar": "https://randomuser.me/api/portraits/women/3.jpg",
-        "createdAt": "2024-06-01T09:00:00Z",
-        "updatedAt": "2024-06-01T09:00:00Z"
-      },
-      "startDate": "2024-06-19T10:00:00Z",
-      "endDate": null,
-      "priority": "Difficile",
-      "labels": [
-        "JQUERY"
-      ],
-      "description": "Mettre à jour automatiquement la date de fin si la tâche est terminée."
     },
     {
       "id": "19",
@@ -421,28 +340,7 @@
       "description": "Permettre la recherche de tâches par nom de personne."
     },
     {
-      "id": "20",
-      "title": "Ajouter l'export Excel",
-      "person": {
-        "id": 2,
-        "name": "Bob Dupont",
-        "email": "bob.dupont@email.com",
-        "phone": "0605060708",
-        "avatar": "https://randomuser.me/api/portraits/men/2.jpg",
-        "createdAt": "2024-06-01T09:00:00Z",
-        "updatedAt": "2024-06-01T09:00:00Z"
-      },
-      "startDate": "2024-06-21T09:00:00Z",
-      "endDate": null,
-      "priority": "Difficile",
-      "labels": [
-        "NODE JS",
-        "JQUERY"
-      ],
-      "description": "Permettre l'export des tâches au format Excel."
-    },
-    {
-      "id": 21,
+      "id": "21",
       "title": "bonjor",
       "person": "sdzafefaefEF",
       "startDate": "2025-06-05",
@@ -450,6 +348,46 @@
       "priority": "Facile",
       "labels": [],
       "description": ""
+    },
+    {
+      "id": "22",
+      "title": "fgergeteryzty",
+      "person": {
+        "id": "3",
+        "name": "Claire Durand",
+        "email": "claire.durand@email.com",
+        "phone": "0609091011",
+        "avatar": "https://randomuser.me/api/portraits/women/3.jpg",
+        "createdAt": "2024-06-01T09:00:00Z",
+        "updatedAt": "2024-06-01T09:00:00Z"
+      },
+      "startDate": "2025-06-03",
+      "endDate": "2025-06-06",
+      "priority": "Facile",
+      "labels": [
+        "CSS"
+      ],
+      "description": "rerzerzterztersdfSDFFD"
+    },
+    {
+      "id": 23,
+      "title": "bekono beyas ambroise fini le teste",
+      "person": {
+        "id": "1",
+        "name": "Alice Martin",
+        "email": "alice.martin@email.com",
+        "phone": "0601020304",
+        "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+        "createdAt": "2024-06-01T09:00:00Z",
+        "updatedAt": "2024-06-01T09:00:00Z"
+      },
+      "startDate": "2025-06-06",
+      "endDate": null,
+      "priority": "Facile",
+      "labels": [
+        "JQUERY"
+      ],
+      "description": "fdfSFzefe"
     }
   ]
 }
