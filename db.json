@@ -1,7 +1,7 @@
 {
   "persons": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Alice Martin",
       "email": "alice.martin@email.com",
       "phone": "0601020304",
@@ -10,7 +10,7 @@
       "updatedAt": "2024-06-01T09:00:00Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Bob Dupont",
       "email": "bob.dupont@email.com",
       "phone": "0605060708",
@@ -19,7 +19,7 @@
       "updatedAt": "2024-06-01T09:00:00Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Claire Durand",
       "email": "claire.durand@email.com",
       "phone": "0609091011",
@@ -30,7 +30,7 @@
   ],
   "todos": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Créer la maquette HTML",
       "person": {
         "id": 1,
@@ -44,11 +44,14 @@
       "startDate": "2024-06-02T08:00:00Z",
       "endDate": null,
       "priority": "Facile",
-      "labels": ["HTML", "CSS"],
+      "labels": [
+        "HTML",
+        "CSS"
+      ],
       "description": "Créer la structure HTML de la page d'accueil."
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Développer l'API NodeJS",
       "person": {
         "id": 2,
@@ -62,11 +65,13 @@
       "startDate": "2024-06-03T09:00:00Z",
       "endDate": null,
       "priority": "Difficile",
-      "labels": ["NODE JS"],
+      "labels": [
+        "NODE JS"
+      ],
       "description": "Développer l'API REST pour la gestion des tâches."
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "Ajouter l'autocomplete pour les personnes",
       "person": {
         "id": 3,
@@ -80,11 +85,13 @@
       "startDate": "2024-06-04T10:00:00Z",
       "endDate": null,
       "priority": "Moyen",
-      "labels": ["JQUERY"],
+      "labels": [
+        "JQUERY"
+      ],
       "description": "Mettre en place l'autocomplete sur le champ personne."
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "Finaliser le design CSS",
       "person": {
         "id": 1,
@@ -98,11 +105,13 @@
       "startDate": "2024-06-05T11:00:00Z",
       "endDate": null,
       "priority": "Moyen",
-      "labels": ["CSS"],
+      "labels": [
+        "CSS"
+      ],
       "description": "Améliorer le design général avec TailwindCSS."
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "Corriger les bugs de validation",
       "person": {
         "id": 2,
@@ -116,11 +125,14 @@
       "startDate": "2024-06-06T09:00:00Z",
       "endDate": null,
       "priority": "Facile",
-      "labels": ["HTML", "JQUERY"],
+      "labels": [
+        "HTML",
+        "JQUERY"
+      ],
       "description": "Corriger les erreurs de validation dans la modale."
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "Ajouter l'export PDF",
       "person": {
         "id": 3,
@@ -134,11 +146,14 @@
       "startDate": "2024-06-07T10:00:00Z",
       "endDate": null,
       "priority": "Difficile",
-      "labels": ["NODE JS", "JQUERY"],
+      "labels": [
+        "NODE JS",
+        "JQUERY"
+      ],
       "description": "Permettre l'export des tâches au format PDF."
     },
     {
-      "id": 7,
+      "id": "7",
       "title": "Mettre en place l'internationalisation",
       "person": {
         "id": 1,
@@ -152,11 +167,14 @@
       "startDate": "2024-06-08T08:00:00Z",
       "endDate": null,
       "priority": "Moyen",
-      "labels": ["HTML", "CSS"],
+      "labels": [
+        "HTML",
+        "CSS"
+      ],
       "description": "Traduire l'application en anglais et français."
     },
     {
-      "id": 8,
+      "id": "8",
       "title": "Créer la documentation technique",
       "person": {
         "id": 2,
@@ -170,11 +188,13 @@
       "startDate": "2024-06-09T09:00:00Z",
       "endDate": null,
       "priority": "Facile",
-      "labels": ["HTML"],
+      "labels": [
+        "HTML"
+      ],
       "description": "Rédiger la documentation technique du projet."
     },
     {
-      "id": 9,
+      "id": "9",
       "title": "Ajouter le multi-label sur les tâches",
       "person": {
         "id": 3,
@@ -188,11 +208,15 @@
       "startDate": "2024-06-10T10:00:00Z",
       "endDate": null,
       "priority": "Moyen",
-      "labels": ["HTML", "CSS", "NODE JS"],
+      "labels": [
+        "HTML",
+        "CSS",
+        "NODE JS"
+      ],
       "description": "Permettre d'ajouter plusieurs labels à une tâche."
     },
     {
-      "id": 10,
+      "id": "10",
       "title": "Mettre à jour la librairie Angular",
       "person": {
         "id": 1,
@@ -206,11 +230,13 @@
       "startDate": "2024-06-11T08:00:00Z",
       "endDate": null,
       "priority": "Difficile",
-      "labels": ["NODE JS"],
+      "labels": [
+        "NODE JS"
+      ],
       "description": "Mettre à jour Angular et ses dépendances."
     },
     {
-      "id": 11,
+      "id": "11",
       "title": "Ajouter la pagination côté front",
       "person": {
         "id": 2,
@@ -224,11 +250,13 @@
       "startDate": "2024-06-12T09:00:00Z",
       "endDate": null,
       "priority": "Facile",
-      "labels": ["JQUERY"],
+      "labels": [
+        "JQUERY"
+      ],
       "description": "Ajouter la pagination sur la liste des tâches."
     },
     {
-      "id": 12,
+      "id": "12",
       "title": "Créer le composant Person",
       "person": {
         "id": 3,
@@ -242,11 +270,14 @@
       "startDate": "2024-06-13T10:00:00Z",
       "endDate": null,
       "priority": "Moyen",
-      "labels": ["HTML", "CSS"],
+      "labels": [
+        "HTML",
+        "CSS"
+      ],
       "description": "Créer le composant pour la gestion des personnes."
     },
     {
-      "id": 13,
+      "id": "13",
       "title": "Ajouter la validation d'email",
       "person": {
         "id": 1,
@@ -260,11 +291,13 @@
       "startDate": "2024-06-14T08:00:00Z",
       "endDate": null,
       "priority": "Facile",
-      "labels": ["JQUERY"],
+      "labels": [
+        "JQUERY"
+      ],
       "description": "Valider l'email lors de la création d'une personne."
     },
     {
-      "id": 14,
+      "id": "14",
       "title": "Ajouter la suppression de tâche",
       "person": {
         "id": 2,
@@ -278,11 +311,13 @@
       "startDate": "2024-06-15T09:00:00Z",
       "endDate": null,
       "priority": "Moyen",
-      "labels": ["NODE JS"],
+      "labels": [
+        "NODE JS"
+      ],
       "description": "Permettre la suppression d'une tâche depuis la liste."
     },
     {
-      "id": 15,
+      "id": "15",
       "title": "Ajouter le multi-select pour les labels",
       "person": {
         "id": 3,
@@ -296,11 +331,15 @@
       "startDate": "2024-06-16T10:00:00Z",
       "endDate": null,
       "priority": "Difficile",
-      "labels": ["HTML", "CSS", "JQUERY"],
+      "labels": [
+        "HTML",
+        "CSS",
+        "JQUERY"
+      ],
       "description": "Permettre de sélectionner plusieurs labels pour une tâche."
     },
     {
-      "id": 16,
+      "id": "16",
       "title": "Ajouter la gestion des priorités",
       "person": {
         "id": 1,
@@ -314,11 +353,13 @@
       "startDate": "2024-06-17T08:00:00Z",
       "endDate": null,
       "priority": "Facile",
-      "labels": ["CSS"],
+      "labels": [
+        "CSS"
+      ],
       "description": "Ajouter un filtre par priorité sur la liste des tâches."
     },
     {
-      "id": 17,
+      "id": "17",
       "title": "Créer la modale d'édition de tâche",
       "person": {
         "id": 2,
@@ -332,11 +373,14 @@
       "startDate": "2024-06-18T09:00:00Z",
       "endDate": null,
       "priority": "Moyen",
-      "labels": ["HTML", "NODE JS"],
+      "labels": [
+        "HTML",
+        "NODE JS"
+      ],
       "description": "Créer une modale pour éditer une tâche existante."
     },
     {
-      "id": 18,
+      "id": "18",
       "title": "Ajouter la gestion des dates de fin",
       "person": {
         "id": 3,
@@ -350,11 +394,13 @@
       "startDate": "2024-06-19T10:00:00Z",
       "endDate": null,
       "priority": "Difficile",
-      "labels": ["JQUERY"],
+      "labels": [
+        "JQUERY"
+      ],
       "description": "Mettre à jour automatiquement la date de fin si la tâche est terminée."
     },
     {
-      "id": 19,
+      "id": "19",
       "title": "Ajouter la recherche par nom de personne",
       "person": {
         "id": 1,
@@ -368,11 +414,14 @@
       "startDate": "2024-06-20T08:00:00Z",
       "endDate": null,
       "priority": "Facile",
-      "labels": ["HTML", "CSS"],
+      "labels": [
+        "HTML",
+        "CSS"
+      ],
       "description": "Permettre la recherche de tâches par nom de personne."
     },
     {
-      "id": 20,
+      "id": "20",
       "title": "Ajouter l'export Excel",
       "person": {
         "id": 2,
@@ -386,8 +435,21 @@
       "startDate": "2024-06-21T09:00:00Z",
       "endDate": null,
       "priority": "Difficile",
-      "labels": ["NODE JS", "JQUERY"],
+      "labels": [
+        "NODE JS",
+        "JQUERY"
+      ],
       "description": "Permettre l'export des tâches au format Excel."
+    },
+    {
+      "id": 21,
+      "title": "bonjor",
+      "person": "sdzafefaefEF",
+      "startDate": "2025-06-05",
+      "endDate": null,
+      "priority": "Facile",
+      "labels": [],
+      "description": ""
     }
   ]
 }

@@ -1,4 +1,4 @@
- import { FormComponent } from './../form/form.component';
+import { FormComponent } from './../form/form.component';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -120,6 +120,22 @@ export class HomeComponent implements OnInit {
       labels: {
         title: 'Labels',
         type: 'html',
+        valuePrepareFunction: (value: string[]) => {
+          if (!Array.isArray(value)) return '';
+          const labelColors: { [key: string]: string } = {
+            'HTML': '#f97316',
+            'CSS': '#3b82f6',
+            'NODE JS': '#22c55e',
+            'JQUERY': '#a21caf'
+          };
+          return value.map(label => `
+            <span style="display:inline-flex;align-items:center;margin-right:6px;">
+              <svg width="24" height="24" viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:${labelColors[label] || '#000'};vertical-align:middle;">
+                <path d="M20 20 L140 20 L140 20 Q150 20 155 25 L180 50 L155 75 Q150 80 140 80 L20 80 Q10 80 10 70 L10 30 Q10 20 20 20 Z" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+          `).join('');
+        },
 
       },
 

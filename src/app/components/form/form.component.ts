@@ -1,4 +1,3 @@
-
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators, FormControl, FormGroup, Form } from '@angular/forms';
@@ -53,16 +52,35 @@ export class FormComponent implements OnInit {
   isEditMode = false;
 
   filteredPeople: Observable<personInput[]>;
-  labelInput = { nativeElement: { value: '' } }; // Mock for label input element
+  labelInput = { nativeElement: { value: '' } };
   labelCtrl = new FormControl();
   availableLabels: Array<'HTML' | 'CSS' | 'NODE JS' | 'JQUERY'> = ['HTML', 'CSS', 'NODE JS', 'JQUERY'];
   filteredLabels: Observable<string[]>;
+
+  // Pour la traduction (exemple, à adapter selon ton système)
+  translate(key: string): string {
+    const translations: any = {
+      'form.required': 'Ce champ est requis.',
+      'form.minlength': 'Minimum 3 caractères requis.',
+      'form.email': 'Adresse e-mail invalide.',
+      'form.personNameMinLength': 'Le nom de la personne doit avoir au moins 3 caractères (après suppression des espaces).',
+      'form.personNameUnique': 'Ce nom de personne existe déjà.',
+      'form.titleUnique': 'Ce titre existe déjà.',
+    };
+    return translations[key] || key;
+  }
+
+  // Ajoute une méthode pour styliser les champs invalides
+  isInvalid(controlName: string): boolean {
+    const control = this.taskForm.get(controlName);
+    return !!(control && control.invalid && (control.touched || control.dirty));
+  }
 
   constructor(public dialogRef: MatDialogRef<FormComponent>,
     private store: Store,
   ) {
     this.taskForm = new FormGroup({
-      title: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      title: new FormControl('', [Validators.required, this.trimValidator]),
       person: new FormControl(null, [Validators.required, this.personNameMinLengthValidator, this.personUniqueNameValidator]),
       startDate: new FormControl(new Date(), Validators.required),
       endDate: new FormControl(null),
@@ -85,14 +103,15 @@ export class FormComponent implements OnInit {
 }
 
   ngOnInit(): void {
+    this.store.dispatch(new GetPersons());
     if (this.task) {
       this.isEditMode = true;
       this.taskForm.patchValue({
         ...this.task,
-        person: this.task.person, // Ensure person object is patched correctly
-        startDate: new Date(this.task.startDate),
-        endDate: this.task.endDate ? new Date(this.task.endDate) : null,
-        isCompleted: !!this.task.endDate // If endDate exists, task is completed
+        person: this.task.person,
+        startDate: this.task.startDate ? this.task.startDate : '',
+        endDate: this.task.endDate ? this.task.endDate : null,
+        isCompleted: !!this.task.endDate
       });
       if (this.task.endDate) {
         this.taskForm.get('endDate')?.disable();
@@ -102,6 +121,14 @@ export class FormComponent implements OnInit {
 
   getPersons(){
 this.store.dispatch(new GetPersons());
+  }
+
+  // Validator pour trim sur le titre
+  trimValidator(control: FormControl): { [key: string]: any } | null {
+    if (typeof control.value === 'string' && control.value.trim().length < 3) {
+      return { 'minlength': true };
+    }
+    return null;
   }
 
   // Custom validator for person name min length (after trim)
@@ -125,6 +152,33 @@ this.store.dispatch(new GetPersons());
     return null;
   }
 
+  // Handler pour l'input personne (autocomplete natif)
+  onPersonInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    const found = this.allPeople.find(p => p.name === value);
+    if (found) {
+      this.taskForm.get('person')?.setValue(found);
+    } else {
+      this.taskForm.get('person')?.setValue({ name: value } as any);
+    }
+  }
+
+  // Handler pour la checkbox terminée
+  onCompletionCheckbox(event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.onCompletionChange(checked);
+  }
+
+  // Handler pour l'ajout de label avec Enter
+  onLabelInputEnter(event: KeyboardEvent |any) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.trim();
+    if (value) {
+      this.addLabelFromInput({ input, value });
+    }
+    event.preventDefault();
+  }
+
   // Helper to display personInput name in autocomplete
   displayPersonName(personInput: personInput): string {
     return personInput ? personInput.name : '';
@@ -138,19 +192,19 @@ this.store.dispatch(new GetPersons());
   getErrorMessage(controlName: string): string {
     const control = this.taskForm.get(controlName);
     if (control?.hasError('required')) {
-      return 'Ce champ est requis.';
+      return this.translate('form.required');
     }
     if (control?.hasError('minlength')) {
-      return `Minimum ${control.errors?.['minlength'].requiredLength} caractères requis.`;
+      return this.translate('form.minlength');
     }
     if (control?.hasError('email')) {
-      return 'Adresse e-mail invalide.';
+      return this.translate('form.email');
     }
     if (control?.hasError('personNameMinLength')) {
-      return 'Le nom de la personne doit avoir au moins 3 caractères (après suppression des espaces).';
+      return this.translate('form.personNameMinLength');
     }
     if (control?.hasError('personNameUnique')) {
-      return 'Ce nom de personne existe déjà.';
+      return this.translate('form.personNameUnique');
     }
     return '';
   }
@@ -211,14 +265,25 @@ this.store.dispatch(new GetPersons());
 
   onSave(): void {
     if (this.taskForm.valid) {
-      const formValue = this.taskForm.getRawValue(); // Use getRawValue to get disabled field values
+      const formValue = this.taskForm.getRawValue();
+      // Correction : conversion des dates si elles sont de type string
+      let startDate = formValue.startDate;
+      let endDate = formValue.endDate;
+      if (typeof startDate === 'string') {
+        startDate = new Date(startDate);
+      }
+      if (formValue.isCompleted) {
+        endDate = new Date();
+      } else if (typeof endDate === 'string' && endDate) {
+        endDate = new Date(endDate);
+      }
       const savedTask: todoInput = {
         ...this.task,
-        id: this.task?.id as number,// Keep existing ID if in edit mode
+        id: this.task?.id as number,
         title: formValue.title.trim(),
         person: formValue.person,
-        startDate: formValue.startDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
-        endDate: formValue.endDate ? formValue.endDate.toISOString().split('T')[0] : null,
+        startDate: startDate ? startDate.toISOString().split('T')[0] : '',
+        endDate: endDate ? endDate.toISOString().split('T')[0] : null,
         priority: formValue.priority,
         labels: formValue.labels,
         description: formValue.description
@@ -226,7 +291,6 @@ this.store.dispatch(new GetPersons());
       this.saveTask.emit(savedTask);
       this.dialogRef.close();
     } else {
-      // Mark all fields as touched to display validation errors
       this.taskForm.markAllAsTouched();
     }
   }
